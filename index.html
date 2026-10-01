@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="MetaRubric learns rewards for rubric-based reinforcement learning through evidence-aware policy optimization and response-guided rubric adaptation.">
+    <meta name="theme-color" content="#10253d">
+    <title>MetaRubric: Learning to Reward for Rubric-Based Reinforcement Learning</title>
+    <link rel="stylesheet" href="styles.css">
+  </head>
+  <body>
+    <header class="hero">
+      <div class="page-shell">
+        <nav class="topbar" aria-label="Main navigation">
+          <a class="wordmark" href="#top">MetaRubric</a>
+          <div class="nav-links">
+            <a href="#overview">Overview</a>
+            <a href="#abstract">Abstract</a>
+            <a href="#method">Method</a>
+          </div>
+        </nav>
+
+        <div class="hero-content" id="top">
+          <p class="eyebrow">Research project</p>
+          <h1>MetaRubric: Learning to Reward for Rubric-Based Reinforcement Learning</h1>
+          <p class="authors">Yuxuan Fan <span aria-hidden="true">·</span> Jaehong Yoon</p>
+          <p class="affiliation">Nanyang Technological University</p>
+          <div class="hero-actions">
+            <a class="button button-primary" href="assets/metarubric.pdf">Read the paper <span aria-hidden="true">↗</span></a>
+            <a class="button button-secondary" href="https://github.com/metarubric/metarubric.github.io">Project repository <span aria-hidden="true">↗</span></a>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <main>
+      <section class="section section-overview page-shell" id="overview" aria-labelledby="overview-title">
+        <div class="section-intro">
+          <p class="section-label">Overview</p>
+          <h2 id="overview-title">Reward the evidence a response actually provides.</h2>
+          <p>Rubric judges can award credit even when a response omits the information a criterion requires. MetaRubric addresses this “Vacuous Credit” by checking response evidence during policy optimization and adapting the rubric to observed errors.</p>
+        </div>
+        <figure class="overview-figure">
+          <img src="assets/metarubric-overview.png" width="2000" height="1201" alt="MetaRubric diagram showing an inner loop of evidence-aware GRPO updates and an outer loop that adjusts criterion weights and revises rubric descriptions." loading="eager">
+          <figcaption>MetaRubric alternates evidence-aware policy updates with rubric adaptation. Accepted rubric updates carry into the next training stage.</figcaption>
+        </figure>
+      </section>
+
+      <section class="section section-tinted" id="abstract" aria-labelledby="abstract-title">
+        <div class="page-shell text-section">
+          <p class="section-label">Paper</p>
+          <h2 id="abstract-title">Abstract</h2>
+          <p>Rubric-based reinforcement learning extends reward-driven optimization to open-ended tasks by assigning partial credit to individual response requirements. However, rubric judges can assign a high criterion score even when the information or action it requires is absent from the response, a failure mode we term <em>Vacuous Credit</em>. Such awards persist after the required information is removed and can reverse the sign of a response’s GRPO advantage.</p>
+          <p>To address this problem, we introduce MetaRubric, which alternates evidence-aware policy optimization with response-guided rubric adaptation. We construct counterfactual counterparts by changing one task-relevant fact in each prompt. During policy optimization, credit is assigned only when the response contains sufficient evidence to satisfy the required rubric criterion. After each policy-optimization stage, current policy responses guide revisions to original and counterfactual criteria while preserving the meaning of the original prompt’s initial rubric as interpreted under each prompt’s facts. We also adapt criterion weights at stage boundaries to better address observed policy errors.</p>
+          <p>Across multiple backbones, MetaRubric improves PubMedQA accuracy by 6.00–20.40 percentage points over static-judge GRPO, with further gains on HealthBench-Hard and two multimodal medical benchmarks.</p>
+        </div>
+      </section>
+
+      <section class="section page-shell" id="method" aria-labelledby="method-title">
+        <div class="section-intro">
+          <p class="section-label">How it works</p>
+          <h2 id="method-title">Policy and rubric improve together.</h2>
+        </div>
+        <div class="method-grid">
+          <article class="method-card">
+            <span class="card-index" aria-hidden="true">01</span>
+            <h3>Evidence-aware policy optimization</h3>
+            <p>Original and counterfactual prompts differ in one task-relevant fact. Criterion credit depends on whether the response covers and supports the required content.</p>
+          </article>
+          <article class="method-card">
+            <span class="card-index" aria-hidden="true">02</span>
+            <h3>Response-guided rubric adaptation</h3>
+            <p>At each stage boundary, observed policy errors guide criterion weights and proposed revisions. Accepted revisions preserve the initial rubric’s requirements.</p>
+          </article>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="page-shell footer-inner">
+        <span>MetaRubric · Nanyang Technological University</span>
+        <a href="#top">Back to top ↑</a>
+      </div>
+    </footer>
+  </body>
+</html>
