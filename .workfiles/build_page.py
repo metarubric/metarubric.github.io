@@ -7,16 +7,6 @@ SITE = Path(__file__).resolve().parents[1]
 PAPER = SITE.parent / "tex_ICLR27_rubrics_ana"
 
 
-def plain(tex):
-    tex = re.sub(r"(?<!\\)%[^\n]*", "", tex)
-    tex = re.sub(r"\\promptfield\{([^{}]+)\}", lambda m: "{" + m[1].replace(r"\_", "_") + "}", tex)
-    tex = re.sub(r"\\(?:textbf|textit|emph)\{([^{}]+)\}", r"\1", tex)
-    tex = tex.replace(r"\par", "\n").replace(r"\%", "%").replace(r"\#", "#").replace(r"\_", "_")
-    tex = tex.replace("``", '“').replace("''", '”')
-    tex = re.sub(r"\\[a-zA-Z]+(?:\[[^]]*\])?", "", tex)
-    return re.sub(r"\n\s*\n\s*\n+", "\n\n", tex).strip()
-
-
 def main_table():
     src = (PAPER / "tables/main_summary.tex").read_text()
     groups = []
@@ -65,21 +55,8 @@ def figure(name, alt, caption):
     return f'''<figure class="paper-figure"><a class="figure-link" href="assets/{name}.pdf" aria-label="Open full-size {html.escape(alt)} PDF"><img src="assets/{name}.png" width="{width}" height="{height}" alt="{html.escape(alt)}" loading="lazy"></a><figcaption>{caption} <a href="assets/{name}.pdf">Open full-size PDF ↗</a></figcaption></figure>'''
 
 
-def prompts():
-    src = (PAPER / 'sections/appendix.tex').read_text()
-    blocks = re.findall(r'\\begin\{paperprompt\}(?:\[[^]]*\])?\{([^}]+)\}\{([^}]+)\}(.*?)\\end\{paperprompt\}', src, re.S)
-    parts = []
-    for title, slug, body in blocks:
-        if slug.startswith('example-'):
-            continue
-        parts.append(f'<details id="prompt-{slug}"><summary>{html.escape(title)}</summary><pre>{html.escape(plain(body))}</pre></details>')
-    return '\n'.join(parts), len(parts)
-
-
 table, groups = main_table()
-prompt_html, prompt_count = prompts()
 assert len(groups) == 4 and sum(len(rows) for _, rows in groups) == 22
-assert prompt_count == 12
 
 page = f'''<!doctype html>
 <html lang="en">
@@ -121,9 +98,9 @@ page = f'''<!doctype html>
 </div></section>
 <section class="section" id="appendix"><div class="page-shell"><div class="narrow"><h2>Appendix: implementation details and examples</h2><p>PubMedQA uses the non-test part of the expert-labeled PQA-L subset for training and the official 500-question test set for evaluation. HealthBench training and validation use conversations outside HealthBench-Hard; the Hard subset has 1,000 test conversations. MMOral-X and MMOral-OPG share the 980-example MMOral-RL training set; their test sets contain 300 and 578 questions.</p><p>Each training configuration uses one seed, so the reported scores do not quantify variation across runs. The supplied HealthBench Qwen3-4B configuration uses eight rollouts per prompt, sixteen responses per original–counterfactual group, rubric and QA reward coefficients of 1.0 and 0.3, and a revision threshold strictly above 0.02 on 20 validation prompt pairs.</p><h3>Auxiliary question banks</h3><p>The reader receives a model response plus the question and four options, then returns one letter. Questions are built from benchmark references and annotations; model responses are withheld during construction. HealthBench-Hard evaluation questions undergo content review without a mandatory question-only screening pass. Each MMOral evaluation bank retains all constructed questions once its valid-wrong screening rate exceeds 90%, including reader-correct items. PubMedQA instead uses its yes/no/maybe reference label directly.</p></div>
 <div class="table-scroll" role="region" aria-label="Auxiliary question bank sizes" tabindex="0"><table><caption>Auxiliary-question construction statistics for evaluation. Questions per entry includes entries without a question.</caption><thead><tr><th scope="col">Benchmark</th><th scope="col">Source entries</th><th scope="col">Covered entries</th><th scope="col">Questions</th><th scope="col">Questions / entry</th></tr></thead><tbody><tr><th scope="row">HealthBench-Hard</th><td>1,000</td><td>965</td><td>4,117</td><td>4.12</td></tr><tr><th scope="row">MMOral-X</th><td>300</td><td>300</td><td>828</td><td>2.76</td></tr><tr><th scope="row">MMOral-OPG</th><td>578</td><td>578</td><td>981</td><td>1.70</td></tr></tbody></table></div>
-<div class="narrow examples"><h3>Three auxiliary QA examples</h3><details><summary>HealthBench-Hard: follow-up timing</summary><p><strong>Source request:</strong> “mention we only recommend a re-check if fever returns or symptoms worsen or fail to improve within another 2-3 days.”</p><p><strong>Question:</strong> What specific follow-up timing should the rewritten message say for lack of improvement?</p><ol type="A"><li>It should say: fails to improve within another 2-3 days.</li><li>It should say: fails to improve within another 5-7 days.</li><li>It should say: fails to improve after completing the full 10-day course.</li><li>It should say: fails to improve within another 24-48 hours.</li></ol><p><strong>Correct answer: A</strong></p></details><details><summary>MMOral-X: treatment identification</summary><p><strong>Source reference:</strong> “Endodontic treatments are noted on teeth 13, 23, 24, 26, and 45.”</p><p><strong>Question:</strong> Which teeth have endodontic treatments?</p><ol type="A"><li>Teeth 13, 23, 24, 26, and 47.</li><li>Teeth 13, 23, 24, 26, and 45.</li><li>Teeth 13, 24, 25, 26, and 45.</li><li>Teeth 12, 23, 24, 26, and 45.</li></ol><p><strong>Correct answer: B</strong></p></details><details><summary>MMOral-OPG: tooth counting and identification</summary><p><strong>Source reference:</strong> “Four wisdom teeth are detected: #18, #28, #38, and #48.”</p><p><strong>Question:</strong> How many wisdom teeth are detected in the radiograph, and which teeth are they?</p><ol type="A"><li>Four wisdom teeth are detected: #18, #28, #38, and #48.</li><li>Two wisdom teeth are detected: #18 and #38.</li><li>Four wisdom teeth are detected: #17, #27, #37, and #47.</li><li>Three wisdom teeth are detected: #18, #28, and #48.</li></ol><p><strong>Correct answer: A</strong></p></details><h3>Paper prompt templates</h3><p>Prompt templates for rubric construction, auxiliary questions, reward evaluation, and rubric adaptation. Braced fields identify task-specific inputs; image inputs accompany multimodal queries.</p>{prompt_html}</div>
+<div class="narrow examples"><h3>Three auxiliary QA examples</h3><details><summary>HealthBench-Hard: follow-up timing</summary><p><strong>Source request:</strong> “mention we only recommend a re-check if fever returns or symptoms worsen or fail to improve within another 2-3 days.”</p><p><strong>Question:</strong> What specific follow-up timing should the rewritten message say for lack of improvement?</p><ol type="A"><li>It should say: fails to improve within another 2-3 days.</li><li>It should say: fails to improve within another 5-7 days.</li><li>It should say: fails to improve after completing the full 10-day course.</li><li>It should say: fails to improve within another 24-48 hours.</li></ol><p><strong>Correct answer: A</strong></p></details><details><summary>MMOral-X: treatment identification</summary><p><strong>Source reference:</strong> “Endodontic treatments are noted on teeth 13, 23, 24, 26, and 45.”</p><p><strong>Question:</strong> Which teeth have endodontic treatments?</p><ol type="A"><li>Teeth 13, 23, 24, 26, and 47.</li><li>Teeth 13, 23, 24, 26, and 45.</li><li>Teeth 13, 24, 25, 26, and 45.</li><li>Teeth 12, 23, 24, 26, and 45.</li></ol><p><strong>Correct answer: B</strong></p></details><details><summary>MMOral-OPG: tooth counting and identification</summary><p><strong>Source reference:</strong> “Four wisdom teeth are detected: #18, #28, #38, and #48.”</p><p><strong>Question:</strong> How many wisdom teeth are detected in the radiograph, and which teeth are they?</p><ol type="A"><li>Four wisdom teeth are detected: #18, #28, #38, and #48.</li><li>Two wisdom teeth are detected: #18 and #38.</li><li>Four wisdom teeth are detected: #17, #27, #37, and #47.</li><li>Three wisdom teeth are detected: #18, #28, and #48.</li></ol><p><strong>Correct answer: A</strong></p></details></div>
 </div></section>
 </main><footer class="site-footer"><div class="page-shell footer-inner"><span>MetaRubric · NTU, Singapore</span><a href="#top">Back to top ↑</a></div></footer>
 </body></html>'''
 (SITE / 'index.html').write_text(page)
-print(f'Wrote page with {sum(len(rows) for _, rows in groups)} main-result rows and {prompt_count} prompt templates')
+print(f'Wrote page with {sum(len(rows) for _, rows in groups)} main-result rows')
