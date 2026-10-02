@@ -6,6 +6,8 @@ Project page for **MetaRubric: Learning to Reward for Rubric-Based Reinforcement
 
 Paper PDF: [`assets/metarubric.pdf`](assets/metarubric.pdf)
 
+Code: <https://github.com/metarubric/metarubric>
+
 ## Citation
 
 ```bibtex
