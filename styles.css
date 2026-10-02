@@ -67,3 +67,8 @@ pre { margin:0; padding:18px 20px; overflow-x:auto; white-space:pre-wrap; overfl
 @media (max-width:800px) { .two-tables { grid-template-columns:minmax(0,1fr); gap:0; } }
 @media (max-width:640px) { .page-shell { width:min(100% - 32px,1120px); } .topbar { align-items:flex-start; flex-direction:column; gap:8px; } .nav-links { gap:7px 16px; } .hero-content { padding:62px 0 74px; } .section { padding-block:56px; } .method-grid { grid-template-columns:1fr; } .method-grid article { padding:22px; } .footer-inner { flex-direction:column; gap:6px; } }
 @media (prefers-reduced-motion:reduce) { html { scroll-behavior:auto; } .button { transition:none; } }
+.bibtex { overflow:hidden; border:1px solid var(--line); border-radius:8px; background:#fff; }
+.bibtex-bar { display:flex; align-items:center; justify-content:space-between; padding:8px 12px 8px 20px; border-bottom:1px solid var(--line); color:var(--muted); background:var(--wash); font-size:.9rem; font-weight:650; }
+.bibtex pre { font-size:.92rem; white-space:pre; }
+.copy-button { padding:5px 14px; border:1px solid var(--line); border-radius:5px; color:var(--navy); background:#fff; font:inherit; cursor:pointer; }
+.copy-button:hover { background:#e7f5f4; }

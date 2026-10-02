@@ -1,6 +1,26 @@
 # MetaRubric project page
 
-Static GitHub Pages site for **MetaRubric: Learning to Reward for Rubric-Based Reinforcement Learning**. The page presents the active paper's abstract, introduction, Vacuous Credit analysis, method, full main-results table, ablations, rubric analyses, and selected appendix material. Its five figures link to the original PDFs and have PNG previews.
+Project page for **MetaRubric: Learning to Reward for Rubric-Based Reinforcement Learning**, live at <https://metarubric.github.io>.
+
+**Authors:** Yuxuan Fan and Jaehong Yoon (corresponding author), Nanyang Technological University, Singapore.
+
+Paper PDF: [`assets/metarubric.pdf`](assets/metarubric.pdf)
+
+## Citation
+
+```bibtex
+@misc{fan2026metarubric,
+  title = {MetaRubric: Learning to Reward for Rubric-Based Reinforcement Learning},
+  author = {Fan, Yuxuan and Yoon, Jaehong},
+  year = {2026},
+  note = {Preprint},
+  howpublished = {\url{https://metarubric.github.io}}
+}
+```
+
+## About this repository
+
+This is a static GitHub Pages site. The page presents the active paper's abstract, introduction, Vacuous Credit analysis, method, full main-results table, ablations, rubric analyses, and selected appendix material, followed by the citation. Its five figures link to the original PDFs and have PNG previews.
 
 GitHub Pages can serve the repository root directly. `.nojekyll` disables Jekyll processing. To preview locally, run `python3 -m http.server` from this directory and open the displayed address.
 
