@@ -4,19 +4,23 @@ Project page for **MetaRubric: Learning to Reward for Rubric-Based Reinforcement
 
 **Authors:** Yuxuan Fan and Jaehong Yoon (corresponding author), Nanyang Technological University, Singapore.
 
-Paper PDF: [`assets/metarubric.pdf`](assets/metarubric.pdf)
+Paper: [arXiv:2610.02824](https://arxiv.org/abs/2610.02824)
 
 Code: <https://github.com/metarubric/metarubric>
 
 ## Citation
+
+Download [citation.bib](citation.bib).
 
 ```bibtex
 @misc{fan2026metarubric,
   title = {MetaRubric: Learning to Reward for Rubric-Based Reinforcement Learning},
   author = {Fan, Yuxuan and Yoon, Jaehong},
   year = {2026},
-  note = {Preprint},
-  howpublished = {\url{https://metarubric.github.io}}
+  eprint = {2610.02824},
+  archivePrefix = {arXiv},
+  primaryClass = {cs.AI},
+  url = {https://arxiv.org/abs/2610.02824}
 }
 ```
 
